@@ -1,0 +1,257 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  SUPER_ADMIN
+  SCHOOL_ADMIN
+  STUDENT
+  BUSINESS_ADMIN
+  BUSINESS_USER
+}
+
+enum SchoolTier {
+  PILOT
+  CAMPUS
+  ENTERPRISE
+}
+
+enum BusinessTier {
+  STARTER
+  GROWTH
+  PARTNER
+}
+
+enum ProjectStatus {
+  DRAFT
+  OPEN
+  IN_PROGRESS
+  SUBMITTED
+  REVIEWED
+  COMPLETED
+}
+
+model User {
+  id            String   @id @default(cuid())
+  name          String?
+  email         String   @unique
+  emailVerified DateTime?
+  passwordHash  String?
+  image         String?
+  role          Role
+  schoolId      String?
+  businessOrgId String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  school         School?             @relation(fields: [schoolId], references: [id])
+  businessOrg    BusinessOrg?        @relation(fields: [businessOrgId], references: [id])
+  accounts       Account[]
+  sessions       Session[]
+  applications   ProjectApplication[]
+  submissions    ProjectSubmission[]
+  artifacts      PortfolioArtifact[]
+  schoolInvites  SchoolInvite[]      @relation("InvitedBySchool")
+  businessInvites BusinessInvite[]   @relation("InvitedByBusiness")
+
+  @@index([schoolId])
+  @@index([businessOrgId])
+}
+
+model School {
+  id                  String    @id @default(cuid())
+  name                String
+  domain              String    @unique
+  tier                SchoolTier @default(PILOT)
+  seatLimit           Int
+  reportingEnabled    Boolean   @default(false)
+  outcomeInsights     Boolean   @default(false)
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  users               User[]
+  approvedBusinesses  SchoolBusinessApproval[]
+  projects            Project[]
+  invites             SchoolInvite[]
+}
+
+model SchoolInvite {
+  id          String   @id @default(cuid())
+  email       String
+  token       String   @unique
+  role        Role
+  schoolId    String
+  invitedById String
+  usedAt      DateTime?
+  createdAt   DateTime @default(now())
+
+  school      School   @relation(fields: [schoolId], references: [id])
+  invitedBy   User     @relation("InvitedBySchool", fields: [invitedById], references: [id])
+}
+
+model BusinessOrg {
+  id                  String       @id @default(cuid())
+  name                String
+  website             String?
+  tier                BusinessTier @default(STARTER)
+  monthlyPostingLimit Int
+  priorityAccess      Boolean      @default(false)
+  isEnabledBySchool   Boolean      @default(true)
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
+
+  users               User[]
+  projects            Project[]
+  invites             BusinessInvite[]
+  approvals           SchoolBusinessApproval[]
+}
+
+model BusinessInvite {
+  id            String   @id @default(cuid())
+  email         String
+  token         String   @unique
+  role          Role
+  businessOrgId String
+  invitedById   String
+  usedAt        DateTime?
+  createdAt     DateTime @default(now())
+
+  businessOrg   BusinessOrg @relation(fields: [businessOrgId], references: [id])
+  invitedBy     User        @relation("InvitedByBusiness", fields: [invitedById], references: [id])
+}
+
+model SchoolBusinessApproval {
+  id            String   @id @default(cuid())
+  schoolId      String
+  businessOrgId String
+  approved      Boolean  @default(false)
+  createdAt     DateTime @default(now())
+
+  school        School      @relation(fields: [schoolId], references: [id])
+  businessOrg   BusinessOrg @relation(fields: [businessOrgId], references: [id])
+
+  @@unique([schoolId, businessOrgId])
+}
+
+model Project {
+  id             String         @id @default(cuid())
+  title          String
+  description    String
+  deliverables   String
+  requiredSkills String[]
+  expectedHours  Int
+  timeline       String
+  category       String
+  status         ProjectStatus  @default(DRAFT)
+  schoolId       String?
+  businessOrgId  String
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  school         School?              @relation(fields: [schoolId], references: [id])
+  businessOrg    BusinessOrg          @relation(fields: [businessOrgId], references: [id])
+  applications   ProjectApplication[]
+  submissions    ProjectSubmission[]
+  feedback       ProjectFeedback[]
+}
+
+model ProjectApplication {
+  id         String   @id @default(cuid())
+  projectId  String
+  studentId  String
+  status     String   @default("PENDING")
+  note       String?
+  createdAt  DateTime @default(now())
+
+  project    Project  @relation(fields: [projectId], references: [id])
+  student    User     @relation(fields: [studentId], references: [id])
+
+  @@unique([projectId, studentId])
+}
+
+model ProjectSubmission {
+  id              String   @id @default(cuid())
+  projectId       String
+  studentId       String
+  reflection      String
+  artifactTitle   String
+  artifactLink    String?
+  artifactFile    String?
+  createdAt       DateTime @default(now())
+
+  project         Project  @relation(fields: [projectId], references: [id])
+  student         User     @relation(fields: [studentId], references: [id])
+}
+
+model ProjectFeedback {
+  id              String   @id @default(cuid())
+  projectId       String
+  studentId       String
+  rating          Int
+  comments        String
+  verified        Boolean  @default(false)
+  createdAt       DateTime @default(now())
+
+  project         Project  @relation(fields: [projectId], references: [id])
+  student         User     @relation(fields: [studentId], references: [id])
+
+  @@unique([projectId, studentId])
+}
+
+model PortfolioArtifact {
+  id              String   @id @default(cuid())
+  studentId       String
+  projectId       String
+  title           String
+  description     String
+  skills          String[]
+  verified        Boolean  @default(false)
+  artifactLink    String?
+  artifactFile    String?
+  createdAt       DateTime @default(now())
+
+  student         User     @relation(fields: [studentId], references: [id])
+  project         Project  @relation(fields: [projectId], references: [id])
+
+  @@unique([studentId, projectId])
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
