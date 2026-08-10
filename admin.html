@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tap Devices — Tappr Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&amp;family=Manrope:wght@600;700;800&amp;display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="admin.css" />
+    <script src="admin.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <a href="/" class="brand"><span class="brand-mark">)))</span><span>tappr</span></a>
+      <span class="admin-label">ADMIN</span>
+    </header>
+    <main>
+      <div class="title-row"><div><p class="eyebrow">ADMIN</p><h1>Tap Devices</h1><p class="subtitle">Manage physical products and their destinations.</p></div><button class="primary desktop-add" data-add>+ Add Tap Device</button></div>
+      <section class="summary" aria-label="Device summary"><div><span id="card-count">—</span><small>Total devices</small></div><div><span id="active-count">—</span><small>Active devices</small></div><div><span id="tap-count">—</span><small>Total taps</small></div></section>
+      <section class="card-list" id="card-list" aria-live="polite"><p class="loading">Loading tap devices…</p></section>
+      <button class="primary mobile-add" data-add>+ Add Tap Device</button>
+      <section class="requests-section"><div class="requests-heading"><div><p class="eyebrow">EARLY ACCESS</p><h2>Customer Requests</h2></div><span id="request-count">— requests</span></div><div class="request-list" id="request-list"><p class="loading">Loading requests…</p></div></section>
+    </main>
+
+    <dialog id="card-dialog">
+      <form id="card-form"><div class="dialog-head"><div><p class="eyebrow" id="form-mode">NEW DEVICE</p><h2 id="form-title">Add a tap device</h2></div><button type="button" class="close" aria-label="Close">×</button></div>
+        <input type="hidden" id="original-card-id" />
+        <label>Tap ID<input id="card-id" name="card_id" placeholder="e.g. TAP001" maxlength="32" required /></label>
+        <label>Customer name<input id="customer-name" name="customer_name" placeholder="Business or customer name" maxlength="100" required /></label>
+        <label>Product type<select id="product-type" name="product_type"><option value="CARD">NFC Card</option><option value="PLAQUE">Review / Social Plaque</option><option value="PROPERTY_SIGN_TAG">Property Sign Tag</option></select></label>
+        <label>Destination URL<input id="destination-url" name="destination_url" type="url" placeholder="https://example.com" required /></label>
+        <label class="toggle-row"><span><b>Device active</b><small>Inactive devices will not redirect.</small></span><input id="active" name="active" type="checkbox" checked /></label>
+        <p class="form-error" id="form-error" role="alert"></p><button class="primary submit" type="submit">Save Tap Device</button>
+      </form>
+    </dialog>
+    <dialog id="request-dialog"><div class="request-detail"><div class="dialog-head"><div><p class="eyebrow">CUSTOMER REQUEST</p><h2 id="request-title"></h2></div><button type="button" class="close request-close" aria-label="Close">×</button></div><div id="request-detail-body"></div></div></dialog>
+  </body>
+</html>
