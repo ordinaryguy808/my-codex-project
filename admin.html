@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cards — Tappr Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&amp;family=Manrope:wght@600;700;800&amp;display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="admin.css" />
+    <script src="admin.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <a href="/" class="brand"><span class="brand-mark">)))</span><span>tappr</span></a>
+      <span class="admin-label">ADMIN</span>
+    </header>
+    <main>
+      <div class="title-row"><div><p class="eyebrow">ADMIN</p><h1>Cards</h1><p class="subtitle">Manage your tap cards and destinations.</p></div><button class="primary desktop-add" data-add>+ Add New Card</button></div>
+      <section class="summary" aria-label="Card summary"><div><span id="card-count">—</span><small>Total cards</small></div><div><span id="active-count">—</span><small>Active cards</small></div><div><span id="tap-count">—</span><small>Total taps</small></div></section>
+      <section class="card-list" id="card-list" aria-live="polite"><p class="loading">Loading cards…</p></section>
+      <button class="primary mobile-add" data-add>+ Add New Card</button>
+    </main>
+
+    <dialog id="card-dialog">
+      <form id="card-form"><div class="dialog-head"><div><p class="eyebrow" id="form-mode">NEW CARD</p><h2 id="form-title">Add a tap card</h2></div><button type="button" class="close" aria-label="Close">×</button></div>
+        <input type="hidden" id="original-card-id" />
+        <label>Card ID<input id="card-id" name="card_id" placeholder="e.g. TAP001" maxlength="32" required /></label>
+        <label>Customer name<input id="customer-name" name="customer_name" placeholder="Business or customer name" maxlength="100" required /></label>
+        <label>Destination URL<input id="destination-url" name="destination_url" type="url" placeholder="https://example.com" required /></label>
+        <label class="toggle-row"><span><b>Card active</b><small>Inactive cards will not redirect.</small></span><input id="active" name="active" type="checkbox" checked /></label>
+        <p class="form-error" id="form-error" role="alert"></p><button class="primary submit" type="submit">Save Card</button>
+      </form>
+    </dialog>
+  </body>
+</html>
