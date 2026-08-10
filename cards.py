@@ -1,4 +1,4 @@
-"""SQLite-backed card storage for the Tappr redirect MVP."""
+"""SQLite-backed Tap Device and customer-request storage."""
 
 from __future__ import annotations
 
@@ -10,6 +10,8 @@ from urllib.parse import urlparse
 
 
 DEFAULT_DATABASE_PATH = Path(__file__).resolve().parent / "data" / "tappr.db"
+PRODUCT_TYPES = {"CARD", "PLAQUE", "PROPERTY_SIGN_TAG"}
+REQUEST_STATUSES = {"NEW", "REVIEWING", "APPROVED", "FULFILLED", "CANCELLED"}
 
 
 def utc_now() -> str:
@@ -26,6 +28,25 @@ class Card:
     total_taps: int
     created_at: str
     updated_at: str
+    product_type: str = "CARD"
+
+
+@dataclass(frozen=True)
+class CustomerRequest:
+    request_id: int
+    customer_name: str
+    business_name: str
+    email: str
+    phone: str
+    product_type: str
+    destination_type: str
+    destination_url: str
+    design_option: str
+    uploaded_file_path: str | None
+    original_file_name: str | None
+    design_notes: str
+    status: str
+    created_at: str
 
 
 @dataclass(frozen=True)
@@ -78,7 +99,37 @@ class SQLiteCardRepository:
 
                 CREATE INDEX IF NOT EXISTS idx_tap_events_card_time
                 ON tap_events(card_id, tapped_at DESC);
+
+                CREATE TABLE IF NOT EXISTS customer_requests (
+                    request_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    customer_name TEXT NOT NULL,
+                    business_name TEXT NOT NULL DEFAULT '',
+                    email TEXT NOT NULL,
+                    phone TEXT NOT NULL DEFAULT '',
+                    product_type TEXT NOT NULL,
+                    destination_type TEXT NOT NULL,
+                    destination_url TEXT NOT NULL,
+                    design_option TEXT NOT NULL,
+                    uploaded_file_path TEXT,
+                    original_file_name TEXT,
+                    design_notes TEXT NOT NULL DEFAULT '',
+                    status TEXT NOT NULL DEFAULT 'NEW',
+                    created_at TEXT NOT NULL
+                );
                 """
+            )
+            # Non-destructive migration: SQLite cannot add a constrained column
+            # conditionally, so inspect the existing MVP table before altering it.
+            card_columns = {
+                row[1] for row in connection.execute("PRAGMA table_info(cards)")
+            }
+            if "product_type" not in card_columns:
+                connection.execute(
+                    "ALTER TABLE cards ADD COLUMN product_type TEXT NOT NULL DEFAULT 'CARD'"
+                )
+            connection.execute(
+                "UPDATE cards SET product_type = 'CARD' "
+                "WHERE product_type IS NULL OR product_type = ''"
             )
             now = utc_now()
             connection.execute(
@@ -103,6 +154,7 @@ class SQLiteCardRepository:
             total_taps=row["total_taps"],
             created_at=row["created_at"],
             updated_at=row["updated_at"],
+            product_type=row["product_type"],
         )
 
     def list_cards(self) -> list[Card]:
@@ -121,31 +173,35 @@ class SQLiteCardRepository:
         return self.get(card_id)
 
     def create_card(
-        self, card_id: str, customer_name: str, destination_url: str, active: bool = True
+        self, card_id: str, customer_name: str, destination_url: str, active: bool = True,
+        product_type: str = "CARD",
     ) -> Card:
         card_id = card_id.strip().upper()
         customer_name = customer_name.strip()
         destination_url = destination_url.strip()
+        product_type = product_type.strip().upper()
         if not card_id or not card_id.replace("-", "").isalnum():
             raise ValueError("Card ID may contain only letters, numbers, and hyphens.")
         if not customer_name:
             raise ValueError("Customer name is required.")
         if urlparse(destination_url).scheme not in {"http", "https"}:
             raise ValueError("Destination must be a valid HTTP or HTTPS URL.")
+        if product_type not in PRODUCT_TYPES:
+            raise ValueError("Unsupported product type.")
         now = utc_now()
         with self._connect() as connection:
             connection.execute(
                 """
                 INSERT INTO cards
-                    (card_id, customer_name, destination_url, active, total_taps, created_at, updated_at)
-                VALUES (?, ?, ?, ?, 0, ?, ?)
+                    (card_id, customer_name, destination_url, active, total_taps, created_at, updated_at, product_type)
+                VALUES (?, ?, ?, ?, 0, ?, ?, ?)
                 """,
-                (card_id, customer_name, destination_url, int(active), now, now),
+                (card_id, customer_name, destination_url, int(active), now, now, product_type),
             )
         return self.get(card_id)
 
     def _update(self, card_id: str, column: str, value: str | int) -> Card | None:
-        allowed_columns = {"customer_name", "destination_url", "active"}
+        allowed_columns = {"customer_name", "destination_url", "active", "product_type"}
         if column not in allowed_columns:
             raise ValueError(f"Unsupported card field: {column}")
         with self._connect() as connection:
@@ -169,6 +225,66 @@ class SQLiteCardRepository:
 
     def set_active(self, card_id: str, active: bool) -> Card | None:
         return self._update(card_id, "active", int(active))
+
+    def update_product_type(self, card_id: str, product_type: str) -> Card | None:
+        product_type = product_type.strip().upper()
+        if product_type not in PRODUCT_TYPES:
+            raise ValueError("Unsupported product type.")
+        return self._update(card_id, "product_type", product_type)
+
+    def create_customer_request(self, **values) -> CustomerRequest:
+        product_type = str(values.get("product_type", "")).upper()
+        if product_type not in PRODUCT_TYPES:
+            raise ValueError("Unsupported product type.")
+        now = utc_now()
+        fields = (
+            "customer_name", "business_name", "email", "phone", "destination_type",
+            "destination_url", "design_option", "uploaded_file_path", "original_file_name",
+            "design_notes",
+        )
+        with self._connect() as connection:
+            cursor = connection.execute(
+                """INSERT INTO customer_requests
+                (customer_name, business_name, email, phone, product_type,
+                 destination_type, destination_url, design_option, uploaded_file_path,
+                 original_file_name, design_notes, status, created_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'NEW', ?)""",
+                tuple(values.get(field, "") for field in fields[:4])
+                + (product_type,)
+                + tuple(values.get(field, "") for field in fields[4:])
+                + (now,),
+            )
+            request_id = cursor.lastrowid
+        return self.get_customer_request(request_id)
+
+    @staticmethod
+    def _to_request(row: sqlite3.Row | None) -> CustomerRequest | None:
+        return CustomerRequest(**dict(row)) if row is not None else None
+
+    def list_customer_requests(self) -> list[CustomerRequest]:
+        with self._connect() as connection:
+            rows = connection.execute(
+                "SELECT * FROM customer_requests ORDER BY created_at DESC, request_id DESC"
+            ).fetchall()
+        return [self._to_request(row) for row in rows]
+
+    def get_customer_request(self, request_id: int) -> CustomerRequest | None:
+        with self._connect() as connection:
+            row = connection.execute(
+                "SELECT * FROM customer_requests WHERE request_id = ?", (request_id,)
+            ).fetchone()
+        return self._to_request(row)
+
+    def update_request_status(self, request_id: int, status: str) -> CustomerRequest | None:
+        status = status.strip().upper()
+        if status not in REQUEST_STATUSES:
+            raise ValueError("Unsupported request status.")
+        with self._connect() as connection:
+            connection.execute(
+                "UPDATE customer_requests SET status = ? WHERE request_id = ?",
+                (status, request_id),
+            )
+        return self.get_customer_request(request_id)
 
     def activate_card(self, card_id: str) -> Card | None:
         return self.set_active(card_id, True)

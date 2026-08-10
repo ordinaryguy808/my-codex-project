@@ -1,6 +1,7 @@
-# Tappr landing page
+# Tappr Tap Devices
 
-A responsive, mobile-first landing page for an NFC smart card startup.
+A responsive landing page, Tap Device admin, NFC redirect service, and
+early-access customization request workflow.
 
 ## Run locally
 
@@ -10,16 +11,26 @@ python3 server.py
 
 Then open `http://localhost:4173`.
 
-The card management screen is available at `http://localhost:4173/admin`. It
-can list, create, and edit local cards, including their destination and status.
+The Tap Device management screen is available at `http://localhost:4173/admin`.
+It can list, create, and edit NFC Cards, Review / Social Plaques, and Property
+Sign Tags, including each device's destination and status. Customer requests
+and private artwork downloads are managed on the same screen.
 This MVP admin screen does not have authentication, so do not expose it publicly.
+
+Visit `http://localhost:4173/customize` to test the customer request form. It
+accepts PNG, JPG, JPEG, and PDF artwork up to 10 MB. Uploads are stored under
+the private, gitignored `data/uploads/` directory and are never served as public
+static files.
 
 ## Test the NFC redirect
 
 The app automatically creates a SQLite database at `data/tappr.db` the first
-time `server.py` starts. It creates the `cards` and `tap_events` tables and seeds
+time `server.py` starts. It creates the `cards`, `tap_events`, and
+`customer_requests` tables and seeds
 `DEMO123` only when that card does not already exist. Cards and taps remain in
-the database when the server restarts.
+the database when the server restarts. Existing databases are migrated in place
+with a `product_type` column; all existing card records remain compatible and
+default to `CARD`.
 
 1. Start the server with `python3 server.py`.
 2. Open `http://localhost:4173/t/DEMO123` in a browser.
