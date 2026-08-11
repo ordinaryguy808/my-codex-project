@@ -3,8 +3,16 @@ const dialog = document.querySelector('#card-dialog');
 const form = document.querySelector('#card-form');
 let cards = [];
 let requests = [];
-const productNames = {CARD: 'NFC Card', PLAQUE: 'Review / Social Plaque', PROPERTY_SIGN_TAG: 'Property Sign Tag'};
-const designNames = {UPLOAD: 'Uploaded own design', TAPPR_DESIGN: 'Tappr design service'};
+
+const productNames = {
+  CARD: 'Tappr Agent Card',
+  PLAQUE: 'Tappr Open House Stand',
+  PROPERTY_SIGN_TAG: 'Tappr Smart Sign Rider',
+  AGENT_LAUNCH_KIT: 'Agent Launch Kit',
+  LISTING_PRO_KIT: 'Listing Pro Kit',
+  TEAM_LAUNCH_KIT: 'Team Launch Kit',
+};
+const designNames = {UPLOAD: 'Uploaded own design', TAPPR_DESIGN: 'Tappr Custom Design'};
 
 const escapeHtml = (value) => String(value).replace(/[&<>'"]/g, (character) => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[character]));
 
@@ -27,7 +35,7 @@ function renderRequests() {
   const requestList = document.querySelector('#request-list');
   requestList.innerHTML = requests.length ? requests.map((request) => `<article class="request-row">
     <div class="request-heading"><b>#${request.request_id} · ${escapeHtml(request.customer_name)}</b><span>${escapeHtml(new Date(request.created_at).toLocaleString())}</span></div>
-    <dl><div><dt>Business</dt><dd>${escapeHtml(request.business_name || '—')}</dd></div><div><dt>Contact</dt><dd>${escapeHtml(request.email)}${request.phone ? ` · ${escapeHtml(request.phone)}` : ''}</dd></div><div><dt>Product</dt><dd>${escapeHtml(productNames[request.product_type] || request.product_type)}</dd></div><div><dt>Destination</dt><dd>${escapeHtml(request.destination_type)} · <a href="${escapeHtml(request.destination_url)}" target="_blank" rel="noopener">${escapeHtml(request.destination_url)}</a></dd></div><div><dt>Design</dt><dd>${escapeHtml(designNames[request.design_option] || request.design_option)}</dd></div><div><dt>Artwork</dt><dd>${request.has_artwork ? `<a href="/api/requests/${request.request_id}/artwork">Download ${escapeHtml(request.original_file_name)}</a>` : 'None'}</dd></div><div><dt>Notes</dt><dd>${escapeHtml(request.design_notes || '—')}</dd></div></dl>
+    <dl><div><dt>Business</dt><dd>${escapeHtml(request.business_name || '—')}</dd></div><div><dt>Contact</dt><dd>${escapeHtml(request.email)}${request.phone ? ` · ${escapeHtml(request.phone)}` : ''}</dd></div><div><dt>Product / package</dt><dd>${escapeHtml(productNames[request.product_type] || request.product_type)}</dd></div><div><dt>Destination</dt><dd>${escapeHtml(request.destination_type)} · <a href="${escapeHtml(request.destination_url)}" target="_blank" rel="noopener">${escapeHtml(request.destination_url)}</a></dd></div><div><dt>Design</dt><dd>${escapeHtml(designNames[request.design_option] || request.design_option)}</dd></div><div><dt>Artwork</dt><dd>${request.has_artwork ? `<a href="/api/requests/${request.request_id}/artwork">Download ${escapeHtml(request.original_file_name)}</a>` : 'None'}</dd></div><div><dt>Notes</dt><dd>${escapeHtml(request.design_notes || '—')}</dd></div></dl>
     <label>Status<select data-request-status="${request.request_id}">${['NEW','REVIEWING','APPROVED','FULFILLED','CANCELLED'].map((status) => `<option ${request.status === status ? 'selected' : ''}>${status}</option>`).join('')}</select></label>
   </article>`).join('') : '<p class="empty">No customer requests yet.</p>';
 }
