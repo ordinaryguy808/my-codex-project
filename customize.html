@@ -1,7 +1,97 @@
 <!doctype html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Request a customized Tappr NFC Card, Review / Social Plaque, or Property Sign Tag."><title>Customize a Tap Device — Tappr</title><link rel="stylesheet" href="customize.css"><script src="customize.js" defer></script></head>
-<body><header><a href="/" class="brand"><span>)))</span> tappr</a><a href="/">Back to home</a></header><main><div class="intro"><p class="eyebrow">EARLY ACCESS</p><h1>Customize your Tappr</h1><p>Tell us what you need. This is a request form—not a checkout—and our team will review your submission.</p></div>
-<form id="customize-form" enctype="multipart/form-data"><fieldset><legend>Customer information</legend><div class="grid"><label>Full name<input name="customer_name" maxlength="120" required></label><label>Business name <small>optional</small><input name="business_name" maxlength="120"></label><label>Email<input name="email" type="email" maxlength="254" required></label><label>Phone <small>optional</small><input name="phone" type="tel" maxlength="40"></label></div></fieldset>
-<fieldset><legend>Product and destination</legend><div class="grid"><label>Tap Device<select name="product_type" required><option value="CARD">NFC Card</option><option value="PLAQUE">Review / Social Plaque</option><option value="PROPERTY_SIGN_TAG">Property Sign Tag</option></select></label><label>Destination type<select name="destination_type" required><option>Instagram</option><option>Facebook</option><option>Google Reviews</option><option>Website</option><option>Booking Page</option><option>Property Listing</option><option>Menu</option><option>Portfolio</option><option>Other</option></select></label></div><label>Destination URL<input name="destination_url" type="url" placeholder="https://example.com" required></label></fieldset>
-<fieldset><legend>Design option</legend><div class="options"><label><input type="radio" name="design_option" value="UPLOAD" checked> <span><b>Upload my own design</b><small>Upload finished artwork for your product.</small></span></label><label><input type="radio" name="design_option" value="TAPPR_DESIGN"> <span><b>Have Tappr design it for me</b><small>Professional design service is available for an additional fee.</small></span></label></div><label id="artwork-label">Your design<input id="artwork" name="artwork" type="file" accept=".png,.jpg,.jpeg,.pdf,image/png,image/jpeg,application/pdf" required><small>PNG, JPG, JPEG, or PDF. Maximum 10 MB.</small></label><div id="preview" aria-live="polite"></div><label>Tell us how you want your Tappr product to look.<textarea name="design_notes" rows="5" maxlength="2000"></textarea></label><label class="rights"><input name="artwork_rights" type="checkbox" required> <span>I confirm that I own or have permission to use the images, logos, and artwork I upload.</span></label></fieldset>
-<p id="form-message" role="alert"></p><button type="submit">Submit early-access request</button></form></main></body></html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Request a customized Tappr real-estate product or package.">
+  <title>Customize Tappr for Real Estate</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="customize.css">
+  <script src="customize.js" defer></script>
+</head>
+<body>
+<header><a href="/" class="brand"><span>)))</span> tappr</a><a href="/">Back to home</a></header>
+<main>
+  <div class="intro">
+    <p class="eyebrow">REAL ESTATE · EARLY ACCESS</p>
+    <h1>Customize your Tappr</h1>
+    <p>Choose a product or package, tell us where it should lead, and share your design preferences. This is an early-access request — not a checkout.</p>
+  </div>
+
+  <form id="customize-form" enctype="multipart/form-data">
+    <fieldset>
+      <legend>Customer information</legend>
+      <div class="grid">
+        <label>Full name<input name="customer_name" maxlength="120" required></label>
+        <label>Business / team name <small>optional</small><input name="business_name" maxlength="120"></label>
+        <label>Email<input name="email" type="email" maxlength="254" required></label>
+        <label>Phone <small>optional</small><input name="phone" type="tel" maxlength="40"></label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Choose your Tappr</legend>
+      <label>Product or package
+        <select id="product-type" name="product_type" required>
+          <optgroup label="Individual products">
+            <option value="CARD">Tappr Agent Card — $79</option>
+            <option value="PLAQUE">Tappr Open House Stand — $129</option>
+            <option value="PROPERTY_SIGN_TAG">Tappr Smart Sign Rider — $149</option>
+          </optgroup>
+          <optgroup label="Real-estate packages">
+            <option value="AGENT_LAUNCH_KIT">Agent Launch Kit — $299</option>
+            <option value="LISTING_PRO_KIT">Listing Pro Kit — $499</option>
+            <option value="TEAM_LAUNCH_KIT">Team Launch Kit — $999</option>
+          </optgroup>
+        </select>
+      </label>
+      <div id="selection-description" class="selection-description" aria-live="polite"></div>
+
+      <div class="grid">
+        <label>Destination type
+          <select name="destination_type" required>
+            <option>Property Listing</option>
+            <option>Website</option>
+            <option>Booking Page</option>
+            <option>Portfolio</option>
+            <option>Instagram</option>
+            <option>Facebook</option>
+            <option>Google Reviews</option>
+            <option>Menu</option>
+            <option>Other</option>
+          </select>
+        </label>
+        <label>Destination URL<input name="destination_url" type="url" placeholder="https://example.com/listing" required></label>
+      </div>
+      <p class="field-help">One Tap ID currently opens one destination at a time. A package can contain several Tap IDs; during review, we'll confirm the destination for each included product.</p>
+    </fieldset>
+
+    <fieldset>
+      <legend>Design option</legend>
+      <div class="options">
+        <label><input type="radio" name="design_option" value="UPLOAD" checked> <span><b>Upload my finished artwork</b><small>$0 design charge for individual products. You can also upload finished artwork or references for a package.</small></span></label>
+        <label><input type="radio" name="design_option" value="TAPPR_DESIGN"> <span><b>Tappr Custom Design</b><small>+$59 for an individual product. Professional design is already included with Tappr packages.</small></span></label>
+      </div>
+      <label id="artwork-label">Your design<input id="artwork" name="artwork" type="file" accept=".png,.jpg,.jpeg,.pdf,image/png,image/jpeg,application/pdf" required><small>PNG, JPG, JPEG, or PDF. Maximum 10 MB.</small></label>
+      <div id="preview" aria-live="polite"></div>
+      <label>Tell us how you want your Tappr product to look.<textarea name="design_notes" rows="5" maxlength="2000" placeholder="Logo placement, colors, wording, property-sign style, team branding, or other notes."></textarea></label>
+      <label class="rights"><input name="artwork_rights" type="checkbox" required> <span>I confirm that I own or have permission to use any images, logos, and artwork I upload.</span></label>
+    </fieldset>
+
+    <section class="estimate" aria-live="polite">
+      <div class="estimate-kicker">ESTIMATED REQUEST TOTAL</div>
+      <div class="estimate-row"><span id="estimate-product-name">Tappr Agent Card</span><strong id="estimate-product-price">$79</strong></div>
+      <div class="estimate-row"><span>Tappr Custom Design</span><strong id="estimate-design-price">$0</strong></div>
+      <div class="estimate-total"><span>Estimated request total</span><strong id="estimate-total">$79</strong></div>
+      <div class="estimate-row shipping"><span>Shipping / local delivery</span><strong>Calculated separately</strong></div>
+      <p>Payment is not collected on this page. Tappr reviews your product, destination, artwork, and fulfillment details before confirming an order.</p>
+    </section>
+
+    <p id="form-message" role="alert"></p>
+    <button type="submit">Submit early-access request</button>
+  </form>
+</main>
+</body>
+</html>
