@@ -1,4 +1,4 @@
-"""Development web server for the Tappr landing page and NFC redirects."""
+"Development web server for the Tappr landing page and NFC redirects."
 
 import argparse
 import json
@@ -11,7 +11,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path, PurePosixPath
 from urllib.parse import unquote, urlparse
 
-from cards import PRODUCT_TYPES, REQUEST_STATUSES, SQLiteCardRepository
+from cards import PRODUCT_TYPES, REQUEST_PRODUCT_TYPES, REQUEST_STATUSES, SQLiteCardRepository
 
 
 PROJECT_ROOT = Path(__file__).resolve().parent
@@ -47,7 +47,7 @@ PUBLIC_FILES = {
 class TapprRequestHandler(BaseHTTPRequestHandler):
     repository: SQLiteCardRepository
 
-    def do_GET(self) -> None:  # noqa: N802 - required by BaseHTTPRequestHandler
+    def do_GET(self) -> None:  # noqa: N802
         path = urlparse(self.path).path
         if path in {"/api/cards", "/api/devices"}:
             self._send_json([self._serialize_card(card) for card in self.repository.list_cards()])
@@ -69,7 +69,7 @@ class TapprRequestHandler(BaseHTTPRequestHandler):
             return
         self._serve_public_file(path)
 
-    def do_POST(self) -> None:  # noqa: N802 - required by BaseHTTPRequestHandler
+    def do_POST(self) -> None:  # noqa: N802
         path = urlparse(self.path).path
         if path == "/api/requests":
             self._create_request()
@@ -103,7 +103,7 @@ class TapprRequestHandler(BaseHTTPRequestHandler):
             return
         self._send_json(self._serialize_card(card), 201)
 
-    def do_PATCH(self) -> None:  # noqa: N802 - required by BaseHTTPRequestHandler
+    def do_PATCH(self) -> None:  # noqa: N802
         path = urlparse(self.path).path
         if path.startswith("/api/requests/"):
             self._patch_request(path)
@@ -186,7 +186,6 @@ class TapprRequestHandler(BaseHTTPRequestHandler):
             length = int(self.headers.get("Content-Length", "0"))
         except ValueError as error:
             raise ValueError("Invalid request data.") from error
-        # Leave room for multipart headers while stopping unbounded request bodies.
         if length <= 0 or length > MAX_UPLOAD_BYTES + 64 * 1024:
             raise ValueError("Uploaded files must be 10 MB or smaller.")
         message = BytesParser(policy=default).parsebytes(
@@ -216,11 +215,14 @@ class TapprRequestHandler(BaseHTTPRequestHandler):
         stored_path = None
         try:
             fields, upload = self._parse_multipart()
-            required = ("customer_name", "email", "product_type", "destination_type", "destination_url", "design_option")
+            required = (
+                "customer_name", "email", "product_type", "destination_type",
+                "destination_url", "design_option",
+            )
             if any(not fields.get(field) for field in required):
                 raise ValueError("Please complete all required fields.")
-            if fields["product_type"] not in PRODUCT_TYPES:
-                raise ValueError("Unsupported product type.")
+            if fields["product_type"] not in REQUEST_PRODUCT_TYPES:
+                raise ValueError("Unsupported product or package.")
             if fields["destination_type"] not in DESTINATION_TYPES:
                 raise ValueError("Unsupported destination type.")
             if fields["design_option"] not in DESIGN_OPTIONS:
@@ -340,7 +342,6 @@ class TapprRequestHandler(BaseHTTPRequestHandler):
         self.wfile.write(content)
 
     def _handle_card_tap(self, card_id: str) -> None:
-        # IDs are a single path segment. Reject empty or nested values.
         if not card_id or "/" in card_id:
             self._send_card_error()
             return
