@@ -1,4 +1,4 @@
-"""SQLite-backed Tap Device and customer-request storage."""
+"SQLite-backed Tap Device and customer-request storage."
 
 from __future__ import annotations
 
@@ -11,6 +11,11 @@ from urllib.parse import urlparse
 
 DEFAULT_DATABASE_PATH = Path(__file__).resolve().parent / "data" / "tappr.db"
 PRODUCT_TYPES = {"CARD", "PLAQUE", "PROPERTY_SIGN_TAG"}
+REQUEST_PRODUCT_TYPES = PRODUCT_TYPES | {
+    "AGENT_LAUNCH_KIT",
+    "LISTING_PRO_KIT",
+    "TEAM_LAUNCH_KIT",
+}
 REQUEST_STATUSES = {"NEW", "REVIEWING", "APPROVED", "FULFILLED", "CANCELLED"}
 
 
@@ -118,8 +123,6 @@ class SQLiteCardRepository:
                 );
                 """
             )
-            # Non-destructive migration: SQLite cannot add a constrained column
-            # conditionally, so inspect the existing MVP table before altering it.
             card_columns = {
                 row[1] for row in connection.execute("PRAGMA table_info(cards)")
             }
@@ -234,8 +237,8 @@ class SQLiteCardRepository:
 
     def create_customer_request(self, **values) -> CustomerRequest:
         product_type = str(values.get("product_type", "")).upper()
-        if product_type not in PRODUCT_TYPES:
-            raise ValueError("Unsupported product type.")
+        if product_type not in REQUEST_PRODUCT_TYPES:
+            raise ValueError("Unsupported product or package.")
         now = utc_now()
         fields = (
             "customer_name", "business_name", "email", "phone", "destination_type",
