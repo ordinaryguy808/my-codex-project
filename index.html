@@ -9,6 +9,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&amp;family=Manrope:wght@500;600;700;800&amp;display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
+    <style>
+      .pricing-section{padding:100px 0}.pricing-products,.package-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:42px;text-align:left}.product-price-card,.package-card{background:#fff;color:var(--ink);border-radius:18px;padding:28px;border:1px solid rgba(255,255,255,.12);position:relative}.product-price-card h3,.package-card h3{font-size:20px;margin:8px 0}.product-price-card p,.package-card p{color:var(--muted);font-size:12px;line-height:1.6}.product-price-card .price-large,.package-card .price-large{font:800 42px Manrope;letter-spacing:-2px;margin:18px 0 4px}.product-price-card .price-note,.package-card .price-note{font-size:10px;color:#8a8992}.product-price-card ul,.package-card ul{list-style:none;padding:0;margin:20px 0 24px;font-size:11px;line-height:1.8}.product-price-card li,.package-card li{margin:7px 0}.product-price-card li::before,.package-card li::before{content:'✓';color:var(--purple);font-weight:800;margin-right:8px}.pricing-subhead{margin-top:70px}.package-card{border:2px solid transparent}.package-card.featured{border-color:var(--purple);box-shadow:0 18px 45px rgba(0,0,0,.16)}.package-badge{display:inline-block;background:var(--lavender);color:var(--purple);font-size:9px;font-weight:800;letter-spacing:.8px;border-radius:20px;padding:7px 10px}.package-save{display:inline-block;background:#eefaf2;color:#237a43;font-size:9px;font-weight:800;border-radius:20px;padding:6px 9px;margin-left:5px}.price-disclaimer{max-width:820px;margin:30px auto 0;color:#a5a4ad;font-size:10px;line-height:1.7}.design-addon{max-width:820px;margin:26px auto 0;padding:18px 22px;border:1px solid #393942;border-radius:14px;text-align:left;display:flex;justify-content:space-between;gap:20px;align-items:center}.design-addon b{font-family:Manrope}.design-addon span{font-size:12px;color:#c9c8d0}.design-addon strong{font:800 24px Manrope;white-space:nowrap}.faq .accordion details p strong{color:var(--ink)}.faq-note{font-size:10px;color:var(--muted);line-height:1.65;margin-top:18px}.real-estate-note{max-width:900px;margin:35px auto 0;background:#23232a;border:1px solid #34343d;border-radius:14px;padding:18px 20px;color:#cbcbd2;font-size:11px;line-height:1.7}.real-estate-note strong{color:#fff}@media(max-width:900px){.pricing-products,.package-grid{grid-template-columns:1fr}.design-addon{display:block}.design-addon strong{display:block;margin-top:12px}}@media(max-width:760px){.pricing-section{padding:75px 0}.product-price-card,.package-card{padding:23px}.product-price-card .price-large,.package-card .price-large{font-size:38px}}
+    </style>
     <script src="script.js" defer></script>
   </head>
   <body>
@@ -50,8 +53,6 @@
         </div>
       </section>
 
-
-
       <section class="section-shell centered" id="how">
         <div class="section-kicker">HOW IT WORKS</div><h2>Tap. Connect. Grow.</h2><p class="section-intro">No app. No awkward searching. Just one simple tap.</p>
         <div class="steps">
@@ -79,14 +80,98 @@
         </div>
       </section>
 
-      <section class="pricing-section" id="pricing"><div class="section-shell centered"><div class="section-kicker">EARLY ACCESS</div><h2>Make Tappr yours.</h2><p class="section-intro">Choose a product, destination, and design option. Submit a request for review—this is not a checkout.</p><a class="button button-primary" href="/customize">Customize your Tap Device <span>→</span></a></div></section>
+      <section class="pricing-section" id="pricing">
+        <div class="section-shell centered" style="padding-top:0;padding-bottom:0">
+          <div class="section-kicker">TAPPR FOR REAL ESTATE · EARLY ACCESS</div>
+          <h2>Start with one. <em>Scale with your listings.</em></h2>
+          <p class="section-intro">Premium NFC + QR tools for listing agents. Every Tappr uses a permanent Tap ID so the destination can be changed later without replacing the physical product.</p>
 
-      <section class="faq section-shell" id="faq"><div class="faq-heading"><div class="section-kicker">FAQ</div><h2>Good questions.<br />Simple answers.</h2><p>Still curious? <a href="mailto:hello@tappr.co">Chat with us →</a></p></div><div class="accordion">
-        <details open><summary>How does a Tappr device work?<span>+</span></summary><p>A compatible phone can read the device and open the destination selected for its Tap ID.</p></details>
-        <details><summary>Do my customers need an app?<span>+</span></summary><p>No. Tappr works with the web browser already on their phone, so there is nothing to download.</p></details>
-        <details><summary>Can I change where my Tap Device links to?<span>+</span></summary><p>Yes. The destination can be updated later without replacing the physical Tappr device.</p></details>
-        <details><summary>Which phones does it work with?<span>+</span></summary><p>Tappr works with most modern NFC-enabled iPhone and Android devices.</p></details>
+          <div class="pricing-products">
+            <article class="product-price-card">
+              <span class="package-badge">NETWORKING</span>
+              <h3>Tappr Agent Card</h3>
+              <div class="price-large">$79</div><div class="price-note">early-access product price</div>
+              <p>A custom NFC + QR card for your agent website, listings page, booking link, social profile, or another public destination.</p>
+              <ul><li>Custom Tap ID setup</li><li>NFC + QR access</li><li>Destination can be changed later</li><li>Basic Tappr interaction tracking</li></ul>
+              <a class="button button-primary" href="/customize?product=CARD">Request Agent Card <span>→</span></a>
+            </article>
+            <article class="product-price-card">
+              <span class="package-badge">OPEN HOUSE</span>
+              <h3>Tappr Open House Stand</h3>
+              <div class="price-large">$129</div><div class="price-note">early-access product price</div>
+              <p>A branded countertop stand for property details, virtual tours, showing requests, agent contact, or another public destination.</p>
+              <ul><li>Custom Tap ID setup</li><li>NFC + QR access</li><li>Reusable for future listings</li><li>Basic Tappr interaction tracking</li></ul>
+              <a class="button button-primary" href="/customize?product=PLAQUE">Request Open House Stand <span>→</span></a>
+            </article>
+            <article class="product-price-card">
+              <span class="package-badge">PROPERTY SIGN</span>
+              <h3>Tappr Smart Sign Rider</h3>
+              <div class="price-large">$149</div><div class="price-note">early-access product price</div>
+              <p>A reusable NFC + QR property-sign attachment designed to send prospects to the current listing or another approved destination.</p>
+              <ul><li>Custom Tap ID setup</li><li>NFC + QR access</li><li>Re-point to the next listing</li><li>Basic Tappr interaction tracking</li></ul>
+              <a class="button button-primary" href="/customize?product=PROPERTY_SIGN_TAG">Request Sign Rider <span>→</span></a>
+            </article>
+          </div>
 
+          <div class="design-addon"><div><b>Professional Tappr Design Service</b><br><span>Send your logo, colors, photos, and requested wording. We prepare the product artwork for review.</span></div><strong>+$59</strong></div>
+
+          <div class="pricing-subhead"><div class="section-kicker">BUNDLE &amp; SAVE</div><h2>Packages built around how agents actually work.</h2><p class="section-intro">Package pricing includes professional Tappr design service. Shipping or local delivery is quoted separately.</p></div>
+          <div class="package-grid">
+            <article class="package-card">
+              <span class="package-badge">SOLO AGENT</span><span class="package-save">SAVE $117</span>
+              <h3>Agent Launch Kit</h3>
+              <div class="price-large">$299</div><div class="price-note">individual listed value: $416</div>
+              <p>Everything needed to test Tappr across networking, open houses, and one active property.</p>
+              <ul><li>1 Tappr Agent Card</li><li>1 Tappr Open House Stand</li><li>1 Tappr Smart Sign Rider</li><li>Professional design service included</li><li>Separate Tap IDs and destinations</li><li>Basic interaction tracking</li></ul>
+              <a class="button button-primary" href="/customize?package=agent-launch">Request Agent Launch Kit <span>→</span></a>
+            </article>
+            <article class="package-card featured">
+              <span class="package-badge">ACTIVE LISTING AGENT</span><span class="package-save">SAVE $215</span>
+              <h3>Listing Pro Kit</h3>
+              <div class="price-large">$499</div><div class="price-note">individual listed value: $714</div>
+              <p>Built for an agent managing several listings at once without needing a new smart sign for every property.</p>
+              <ul><li>1 Tappr Agent Card</li><li>1 Tappr Open House Stand</li><li>3 Tappr Smart Sign Riders</li><li>Professional design service included</li><li>Separate Tap IDs and destinations</li><li>Basic interaction tracking</li></ul>
+              <a class="button button-primary" href="/customize?package=listing-pro">Request Listing Pro Kit <span>→</span></a>
+            </article>
+            <article class="package-card">
+              <span class="package-badge">SMALL TEAM</span><span class="package-save">SAVE $449</span>
+              <h3>Team Launch Kit</h3>
+              <div class="price-large">$999</div><div class="price-note">individual listed value: $1,448</div>
+              <p>A coordinated starter package for a small real-estate team that wants multiple agent and property touchpoints.</p>
+              <ul><li>3 Tappr Agent Cards</li><li>2 Tappr Open House Stands</li><li>6 Tappr Smart Sign Riders</li><li>Coordinated professional design included</li><li>Separate Tap IDs and destinations</li><li>Basic interaction tracking</li></ul>
+              <a class="button button-primary" href="/customize?package=team-launch">Request Team Launch Kit <span>→</span></a>
+            </article>
+          </div>
+          <p class="price-disclaimer">Early-access pricing is for product validation and may change. Tappr currently reviews requests before confirming an order and does not collect payment on the request form. Package savings are calculated from the individual early-access prices shown above plus one $59 professional design service. Future hosting or service pricing has not been finalized, and Tappr does not promise lifetime hosting.</p>
+          <div class="real-estate-note"><strong>For real-estate professionals:</strong> Tappr is a marketing technology product, not a brokerage, MLS, or National Association of REALTORS® product. Agents remain responsible for seller authorization, brokerage approval, advertising disclosures, MLS rules, trademark permissions, and any local sign requirements that apply to their use.</div>
+        </div>
+      </section>
+
+      <section class="faq section-shell" id="faq"><div class="faq-heading"><div class="section-kicker">REAL ESTATE FAQ</div><h2>Questions agents are likely to ask.</h2><p>Still curious? <a href="mailto:hello@tappr.co">Chat with us →</a></p><p class="faq-note">These answers describe the current early-access product. Features and physical specifications may change as Tappr completes beta testing.</p></div><div class="accordion">
+        <details open><summary>What is Tappr for real estate?<span>+</span></summary><p>Tappr connects a physical NFC + QR product to a permanent Tap ID. That Tap ID opens the destination assigned to it, such as a public property listing, virtual tour, agent page, booking page, or another authorized web link.</p></details>
+        <details><summary>Why use both NFC and a QR code?<span>+</span></summary><p>NFC is convenient when someone is close enough to tap the product. QR is useful when the person is farther away or their phone does not support NFC. Both can point through the same Tappr link.</p></details>
+        <details><summary>Do buyers need to download an app?<span>+</span></summary><p>No. A compatible phone can open the Tappr link in its normal web browser. QR also works through the phone's camera or QR reader.</p></details>
+        <details><summary>Can I reuse the same Tappr when a property sells?<span>+</span></summary><p>Yes. The physical Tappr keeps the same Tap ID. The destination can be changed to a new authorized listing or another web destination instead of replacing the product just because the URL changed.</p></details>
+        <details><summary>What can my Tappr link to?<span>+</span></summary><p>It can open a public property listing page, virtual tour, agent website, booking page, lead form, digital brochure, social profile, or another valid HTTP/HTTPS web destination that you are authorized to use.</p></details>
+        <details><summary>Can one Tappr show multiple listings?<span>+</span></summary><p>Tappr currently redirects to one destination URL at a time. That destination can itself be an agent or brokerage page containing multiple listings.</p></details>
+        <details><summary>Can I change the destination myself?<span>+</span></summary><p>During early access, destination changes are managed through Tappr rather than a public self-service customer dashboard. Self-service controls are a future product direction, not a current promise.</p></details>
+        <details><summary>Does Tappr work with my existing real-estate sign?<span>+</span></summary><p>The Smart Sign Rider is intended to complement an existing sign setup rather than automatically replace the brokerage's main sign. Fit, mounting, dimensions, and brokerage design rules should be confirmed before production.</p></details>
+        <details><summary>Can I add Tappr to any brokerage sign?<span>+</span></summary><p>Not automatically. Some brokerages control sign layouts, riders, logos, and approved vendors. The agent should obtain any required brokerage approval before ordering or installing a Tappr sign product.</p></details>
+        <details><summary>Will NFC work from a passing car?<span>+</span></summary><p>No. NFC is a close-range interaction and should be treated as a tap experience. The QR code is the better option for viewing from a greater distance when it is safe for the prospect to scan.</p></details>
+        <details><summary>What if a buyer's phone does not support NFC?<span>+</span></summary><p>They can scan the QR code instead. The purpose of including both technologies is to provide a second way to reach the same digital destination.</p></details>
+        <details><summary>Does the buyer need internet access?<span>+</span></summary><p>Yes. NFC or QR can open the Tappr URL, but the phone needs an internet connection to load Tappr and the final destination.</p></details>
+        <details><summary>Does the NFC product need a battery or power?<span>+</span></summary><p>No battery is required for the passive NFC tags used in Tappr products.</p></details>
+        <details><summary>Can a Property Sign Tappr be used outdoors?<span>+</span></summary><p>The property-sign product is intended for outdoor applications, but final weather resistance depends on the material, finish, adhesive, mounting method, and NFC construction used for the specific version. Tappr will confirm the applicable product specifications before an early-access order is approved.</p></details>
+        <details><summary>What if the sign or mounting surface is metal?<span>+</span></summary><p>Metal can interfere with ordinary NFC tags. Tappr property prototypes use NFC components designed for the intended mounting surface when metal is involved, and the finished product should be tested before installation.</p></details>
+        <details><summary>What analytics do I get?<span>+</span></summary><p>The current beta supports basic Tappr interaction counts and timestamps. It does not yet promise a full customer analytics dashboard, lead identity, geographic attribution, or separate NFC-versus-QR reporting.</p></details>
+        <details><summary>Does a tap tell me who the buyer is?<span>+</span></summary><p>No. The current basic Tappr tap event records the Tap ID and time of the interaction; a tap by itself does not identify the person. If you send visitors to your own lead form or booking page, that destination may collect information under its own privacy practices.</p></details>
+        <details><summary>Can Tappr capture leads for me?<span>+</span></summary><p>Tappr's current role is to route the visitor to your chosen destination. You can point it to an existing lead form, showing request page, CRM form, or booking page, but native Tappr lead-capture automation is not part of the current beta.</p></details>
+        <details><summary>Can I use my brokerage logo and colors?<span>+</span></summary><p>Yes, when you have permission to use those brand assets and your brokerage permits the design. Tappr's artwork-rights confirmation requires customers to confirm they own or have permission to use uploaded logos, images, and artwork.</p></details>
+        <details><summary>Can I put the REALTOR® logo or word on my Tappr?<span>+</span></summary><p>Only when the person or organization is authorized to use the National Association of REALTORS® membership marks and the design follows the applicable trademark rules. Purchasing Tappr does not grant rights to those marks.</p></details>
+        <details><summary>Does Tappr make my sign or listing advertising compliant?<span>+</span></summary><p>No. Real-estate advertising rules can depend on the brokerage, seller authorization, MLS, association rules, state law, and local sign requirements. Tappr provides the technology and physical product; the real-estate professional remains responsible for compliant use.</p></details>
+        <details><summary>What happens if the listing price or status changes?<span>+</span></summary><p>If your Tappr points to a public listing page that your brokerage or listing platform keeps current, visitors will see the current information on that destination. If you need the Tappr destination itself changed, request a destination update during early access.</p></details>
+        <details><summary>Is there a monthly fee?<span>+</span></summary><p>There is no separate monthly charge listed for the current early-access product request. Future hosting, analytics, or software-service pricing has not been finalized. Tappr will disclose any future recurring charge before a customer agrees to it.</p></details>
+        <details><summary>Is this a checkout page?<span>+</span></summary><p>No. Tappr is still in early access. You submit a customization request first, Tappr reviews the product, design, destination, and fulfillment details, and payment is not collected on the request form.</p></details>
       </div></section>
 
       <section class="final-cta"><div class="cta-orb one"></div><div class="cta-orb two"></div><div class="eyebrow light-eye"><span></span>YOUR NEXT CONNECTION IS ONE TAP AWAY</div><h2>Ready to make every<br />interaction count?</h2><p>Choose the Tap Device and destination that fit your business or property.</p><a class="button button-white" href="/customize">Request a Tap Device <span>→</span></a><small>Early-access request · Not a checkout</small></section>
