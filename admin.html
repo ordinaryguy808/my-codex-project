@@ -16,7 +16,7 @@
       <span class="admin-label">ADMIN</span>
     </header>
     <main>
-      <div class="title-row"><div><p class="eyebrow">ADMIN</p><h1>Tap Devices</h1><p class="subtitle">Manage Tap Devices, destinations, and customer requests.</p></div><button class="primary desktop-add" data-add>+ Add Tap Device</button></div>
+      <div class="title-row"><div><p class="eyebrow">ADMIN</p><h1>Tap Devices</h1><p class="subtitle">Manage real-estate Tap Devices, destinations, and customer requests.</p></div><button class="primary desktop-add" data-add>+ Add Tap Device</button></div>
       <section class="summary" aria-label="Tap Device summary"><div><span id="card-count">—</span><small>Total devices</small></div><div><span id="active-count">—</span><small>Active devices</small></div><div><span id="tap-count">—</span><small>Total taps</small></div></section>
       <section class="card-list" id="card-list" aria-live="polite"><p class="loading">Loading Tap Devices…</p></section>
       <button class="primary mobile-add" data-add>+ Add Tap Device</button>
@@ -30,7 +30,7 @@
         <input type="hidden" id="original-card-id" />
         <label>Tap ID<input id="card-id" name="card_id" placeholder="e.g. TAP001" maxlength="32" required /></label>
         <label>Customer name<input id="customer-name" name="customer_name" placeholder="Business or customer name" maxlength="100" required /></label>
-        <label>Product type<select id="product-type" name="product_type" required><option value="CARD">NFC Card</option><option value="PLAQUE">Review / Social Plaque</option><option value="PROPERTY_SIGN_TAG">Property Sign Tag</option></select></label>
+        <label>Product type<select id="product-type" name="product_type" required><option value="CARD">Tappr Agent Card</option><option value="PLAQUE">Tappr Open House Stand</option><option value="PROPERTY_SIGN_TAG">Tappr Smart Sign Rider</option></select></label>
         <label>Destination URL<input id="destination-url" name="destination_url" type="url" placeholder="https://example.com" required /></label>
         <label class="toggle-row"><span><b>Device active</b><small>Inactive devices will not redirect.</small></span><input id="active" name="active" type="checkbox" checked /></label>
         <p class="form-error" id="form-error" role="alert"></p><button class="primary submit" type="submit">Save Tap Device</button>
